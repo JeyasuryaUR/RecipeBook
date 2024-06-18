@@ -1,0 +1,30 @@
+# Ignore compiled Python files
+*.pyc
+
+# Ignore static files
+staticfiles/
+
+# Ignore media files
+media/
+
+# Ignore log files
+*.log
+
+# Ignore environment-specific settings
+.env
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore local development server
+.env.local
+
+# Ignore any other sensitive or generated files
+*.pyo
+*.pyc
+__pycache__/
+*.so
+*.egg-info/
+dist/
+build/
