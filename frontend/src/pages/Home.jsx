@@ -7,6 +7,7 @@ import EditRecipe from '../components/EditRecipe';
 function HomePage() {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [showAddRecipe, setShowAddRecipe] = useState(false);
 
   useEffect(() => {
     fetchRecipes();
@@ -17,6 +18,7 @@ function HomePage() {
       .then(response => {
         setRecipes(response.data);
         setSelectedRecipe(null);
+        setShowAddRecipe(false);
       });
   };
 
@@ -32,15 +34,22 @@ function HomePage() {
   };
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-4xl font-bold mb-4">Recipe Book</h1>
-      <AddRecipe onAdd={fetchRecipes} />
-      {selectedRecipe ? (
-        <EditRecipe recipe={selectedRecipe} onEdit={fetchRecipes} />
-      ) : (
-        <RecipeList recipes={recipes} onEdit={handleEdit} onDelete={handleDelete} />
-      )}
-    </div>
+    <>
+      <nav className="flex items-center justify-between py-4 px-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md">
+        <h1 className="text-4xl font-bold">Recipe Book</h1>
+        <button onClick={() => setShowAddRecipe(!showAddRecipe)} className="bg-white hover:bg-gray-100 text-blue-500 font-bold py-2 px-4 rounded transition duration-200">
+          {showAddRecipe ? 'Close' : 'Add Recipe'}
+        </button>
+      </nav>
+      <div className="container mx-auto">
+        {showAddRecipe && <AddRecipe onAdd={fetchRecipes} />}
+        {selectedRecipe ? (
+          <EditRecipe recipe={selectedRecipe} onEdit={fetchRecipes} />
+        ) : (
+          <RecipeList recipes={recipes} onEdit={handleEdit} onDelete={handleDelete} />
+        )}
+      </div>
+    </>
   );
 }
 
