@@ -1,0 +1,47 @@
+[
+    {
+        "title": "Chocolate Cake",
+        "ingredients": "Flour, Sugar, Cocoa Powder, Baking Powder, Eggs, Milk, Vegetable Oil, Vanilla Extract",
+        "instructions": "Preheat oven to 350F. Mix dry ingredients. Add eggs, milk, oil, and vanilla. Bake for 30 minutes.",
+        "category": "Dessert",
+        "calories": 2500,
+        "servings": 8,
+        "prep_time": 20
+    },
+    {
+        "title": "Spaghetti Carbonara",
+        "ingredients": "Spaghetti, Eggs, Parmesan Cheese, Pancetta, Black Pepper",
+        "instructions": "Cook spaghetti. Fry pancetta. Mix eggs and cheese. Combine all with pepper.",
+        "category": "Italian",
+        "calories": 1500,
+        "servings": 4,
+        "prep_time": 30
+    },
+    {
+        "title": "Vegetable Stir Fry",
+        "ingredients": "Broccoli, Carrot, Bell Peppers, Soy Sauce, Garlic, Ginger, Vegetable Oil",
+        "instructions": "Stir fry vegetables. Add soy sauce, garlic, and ginger.",
+        "category": "Chinese",
+        "calories": 600,
+        "servings": 4,
+        "prep_time": 25
+    },
+    {
+        "title": "Chicken Curry",
+        "ingredients": "Chicken, Onions, Tomatoes, Curry Powder, Coconut Milk",
+        "instructions": "Fry onions, add chicken. Add tomatoes and curry powder. Pour in coconut milk and simmer.",
+        "category": "Indian",
+        "calories": 1300,
+        "servings": 6,
+        "prep_time": 45
+    },
+    {
+        "title": "Beef Tacos",
+        "ingredients": "Ground Beef, Taco Seasoning, Tortillas, Lettuce, Tomato, Cheese",
+        "instructions": "Cook beef with seasoning. Serve on tortillas with lettuce, tomato, and cheese.",
+        "category": "Mexican",
+        "calories": 800,
+        "servings": 5,
+        "prep_time": 20
+    }
+]
