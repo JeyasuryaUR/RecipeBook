@@ -1,24 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify'; // Step 1: Import toast
+import 'react-toastify/dist/ReactToastify.css';
 import AddRecipe from '../components/AddRecipe';
 import RecipeList from '../components/RecipeList';
 import EditRecipe from '../components/EditRecipe';
+import FilterPane from '../components/cards/FilterPane';
 
 function HomePage() {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [showAddRecipe, setShowAddRecipe] = useState(false);
+  const [filters, setFilters] = useState({
+    calories: { min: '', max: '' },
+    servings: { min: '', max: '' },
+    prep_time: '',
+    category: ''
+  });
 
   useEffect(() => {
     fetchRecipes();
   }, []);
 
-  const fetchRecipes = () => {
-    axios.get('/recipes/')
+  const fetchRecipes = (queryString = '') => {
+    if (queryString) {
+      queryString = `?${queryString}`;
+    }
+    axios.get(`/recipes/${queryString}`)
       .then(response => {
         setRecipes(response.data);
         setSelectedRecipe(null);
         setShowAddRecipe(false);
+        toast.success('Recipes fetched successfully!');
+      })
+      .catch(error => {
+        toast.error('Failed to fetch recipes.');
       });
   };
 
@@ -26,10 +42,18 @@ function HomePage() {
     setSelectedRecipe(recipe);
   };
 
+  const handleFilterChange = (queryString) => {
+    fetchRecipes(queryString);
+  };
+
   const handleDelete = (id) => {
     axios.delete(`/recipes/${id}/`)
       .then(response => {
         fetchRecipes();
+        toast.success('Recipe deleted successfully!'); // Step 2: Success toast
+      })
+      .catch(error => {
+        toast.error('Failed to delete recipe.'); // Handling errors
       });
   };
 
@@ -46,7 +70,9 @@ function HomePage() {
         {selectedRecipe ? (
           <EditRecipe recipe={selectedRecipe} onEdit={fetchRecipes} />
         ) : (
-          <RecipeList recipes={recipes} onEdit={handleEdit} onDelete={handleDelete} />
+          <RecipeList recipes={recipes} onEdit={handleEdit} onDelete={handleDelete}>
+            <FilterPane handleFilterChange={handleFilterChange} />
+          </RecipeList>
         )}
       </div>
     </>
