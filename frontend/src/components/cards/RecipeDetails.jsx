@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaTrashAlt, FaClock, FaUsers, FaFire } from 'react-icons/fa';
 
 function RecipeDetails({ recipe, onClose, onEdit, onDelete }) {
   return (
@@ -12,6 +12,11 @@ function RecipeDetails({ recipe, onClose, onEdit, onDelete }) {
       {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} className="w-full h-[50vh] object-cover mb-4" />}
       <h2 className="font-bold text-2xl mb-2 text-purple-800">{recipe.title}</h2>
       <div className="inline-block bg-blue-200 text-blue-800 py-2 px-4 rounded-full mb-2">{recipe.category}</div>
+      <div className="flex items-center space-x-4 mb-2">
+        <span className="flex items-center"><FaClock className="mr-2"/> {recipe.prep_time} mins</span>
+        <span className="flex items-center"><FaUsers className="mr-2"/> {recipe.servings} servings</span>
+        <span className="flex items-center"><FaFire className="mr-2"/> {recipe.calories} kcal</span>
+      </div>
       <p className="text-gray-700 text-base mb-2"><strong className="text-gray-900">Ingredients:</strong> {recipe.ingredients}</p>
       <p className="text-gray-700 text-base mb-2"><strong className="text-gray-900">Instructions:</strong></p>
       <ol className="list-decimal list-inside">

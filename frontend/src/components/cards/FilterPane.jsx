@@ -1,14 +1,24 @@
 import React, { useState } from "react";
-import { FaSlidersH } from "react-icons/fa"; // Importing slider icon
-import MultiRangeSlider from "multi-range-slider-react"; // Importing MultiRangeSlider
+import { FaBars, FaSlidersH, FaTimes } from "react-icons/fa"; 
+import MultiRangeSlider from "multi-range-slider-react"; 
 
 const FilterPane = ({ handleFilterChange }) => {
-  const [filters, setFilters] = useState({
-    calories: [0, 5000], // Assuming a default range for calories
-    servings: [1, 10], // Assuming a default range for servings
+  const initialFilters = {
+    calories: [0, 5000], 
+    servings: [1, 10], 
     prep_time: "",
     category: "",
-  });
+    keywords: "",
+  };
+
+  const [filters, setFilters] = useState(initialFilters);
+
+  const [isPaneOpen, setIsPaneOpen] = useState(false);
+
+  const togglePane = () => {
+    setIsPaneOpen(!isPaneOpen);
+  };
+
 
   const handleRangeChange = (minValue, maxValue, name) => {
     setFilters((prevFilters) => ({
@@ -27,8 +37,21 @@ const FilterPane = ({ handleFilterChange }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const queryString = Object.entries(filters)
-      .filter(([_, value]) => value !== "" && value !== [0, 0])
+    submitFilters(filters);
+  };
+
+  const handleReset = () => {
+    setFilters(initialFilters);
+    submitFilters(initialFilters); 
+  };
+  
+
+  const submitFilters = (currentFilters) => {
+    if (isPaneOpen) {
+      setIsPaneOpen(false);
+    }
+    const queryString = Object.entries(currentFilters)
+      .filter(([_, value]) => value !== "" && value != [0, 0])
       .map(([key, value]) => {
         if (Array.isArray(value)) {
           return `${encodeURIComponent(key)}_min=${encodeURIComponent(
@@ -42,69 +65,111 @@ const FilterPane = ({ handleFilterChange }) => {
   };
 
   return (
-    <form className="filter-pane p-4" onSubmit={handleSubmit}>
-      <div className="filter mb-4">
-        <label className="block mb-2 text-sm font-medium text-gray-900">Calories:</label>
-        <MultiRangeSlider
-          min={0}
-          max={5000}
-          step={1}
-          ruler={false}
-          label={true}
-          preventWheel={false}
-          minValue={filters.calories[0]}
-          maxValue={filters.calories[1]}
-          onInput={(e) => {
-            handleRangeChange(e.minValue, e.maxValue, "calories");
-          }}
-        />
-      </div>
-      <div className="filter mb-4">
-        <label className="block mb-2 text-sm font-medium text-gray-900">Servings:</label>
-        <MultiRangeSlider
-          min={1}
-          max={10}
-          step={1}
-          ruler={false}
-          label={true}
-          preventWheel={false}
-          minValue={filters.servings[0]}
-          maxValue={filters.servings[1]}
-          onInput={(e) => {
-            handleRangeChange(e.minValue, e.maxValue, "servings");
-          }}
-        />
-      </div>
-      <div className="filter mb-4">
-        <label className="block mb-2 text-sm font-medium text-gray-900">
-          {"Prep Time (<= minutes):"}
-        </label>
-        <input
-          type="number"
-          placeholder="Minutes"
-          name="prep_time"
-          value={filters.prep_time}
-          onChange={handleChange}
-          className="input input-bordered w-full max-w-xs"
-        />
-      </div>
-      <div className="filter mb-4">
-        <label className="block mb-2 text-sm font-medium text-gray-900">
-          Category:
-        </label>
-        <input
-          type="text"
-          placeholder="Category"
-          name="category"
-          value={filters.category}
-          onChange={handleChange}
-          className="input input-bordered w-full max-w-xs"
-        />
-      </div>
-      <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out flex items-center">
-        <FaSlidersH className="mr-2" /> Submit
+    <>
+      <button className="md:hidden p-4" onClick={togglePane}>
+        {isPaneOpen ? <FaTimes /> : <FaBars />}
       </button>
-    </form>
+      <div className={`filter-pane md:block absolute z-10 md:bg-none bg-white transform ${isPaneOpen ? "translate-x-0" : "-translate-x-full hidden"} transition-transform duration-300 ease-in-out md:translate-x-0`}>
+        <form
+          className={`p-4 md:p-6 mx-auto`}
+          onSubmit={handleSubmit}
+        >
+          <div className="filter mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Search:
+            </label>
+            <input
+              type="text"
+              placeholder="Keyword"
+              name="keyword" 
+              value={filters.keyword} 
+              onChange={handleChange} 
+              className="input input-bordered border p-1 rounded w-full max-w-xs sm:max-w-sm md:max-w-md"
+            />
+          </div>
+          <div className="filter mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Calories:
+            </label>
+            <MultiRangeSlider
+              min={0}
+              max={5000}
+              step={1}
+              ruler={false}
+              label={true}
+              preventWheel={false}
+              minValue={filters.calories[0]}
+              maxValue={filters.calories[1]}            
+              onInput={(e) => {
+                handleRangeChange(e.minValue, e.maxValue, "calories");
+              }}
+              className="border-none shadow-none"
+            />
+          </div>
+          <div className="filter mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Servings:
+            </label>
+            <MultiRangeSlider
+              min={1}
+              max={10}
+              step={1}
+              ruler={false}
+              label={true}
+              preventWheel={false}
+              minValue={filters.servings[0]}
+              maxValue={filters.servings[1]}
+              onInput={(e) => {
+                handleRangeChange(e.minValue, e.maxValue, "servings");
+              }}
+              className="border-none shadow-none"
+            />
+          </div>
+          <div className="filter mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Max. Duration
+            </label>
+            <input
+              type="number"
+              placeholder="Minutes"
+              name="prep_time"
+              value={filters.prep_time}
+              onChange={handleChange}
+              className="input input-bordered border p-1 w-full max-w-xs sm:max-w-sm md:max-w-md"
+            />
+          </div>
+          <div className="filter mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Category:
+            </label>
+            <input
+              type="text"
+              placeholder="Category"
+              name="category"
+              value={filters.category}
+              onChange={handleChange}
+              className="input input-bordered border p-1 w-full max-w-xs sm:max-w-sm md:max-w-md"
+            />
+          </div>
+          <div className="flex justify-center md:justify-start space-x-4">
+            <button
+              type="submit"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out flex items-center"
+            >
+              Submit
+            </button>
+            <button
+              type="button" 
+              onClick={handleReset}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out flex items-center"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+      
+    </>
   );
 };
 

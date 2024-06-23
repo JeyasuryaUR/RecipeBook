@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify'; // Step 1: Import toast
+import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import AddRecipe from '../components/AddRecipe';
 import RecipeList from '../components/RecipeList';
@@ -31,7 +31,7 @@ function HomePage() {
         setRecipes(response.data);
         setSelectedRecipe(null);
         setShowAddRecipe(false);
-        toast.success('Recipes fetched successfully!');
+        // toast.success('Recipes fetched successfully!');
       })
       .catch(error => {
         toast.error('Failed to fetch recipes.');
@@ -50,17 +50,17 @@ function HomePage() {
     axios.delete(`/recipes/${id}/`)
       .then(response => {
         fetchRecipes();
-        toast.success('Recipe deleted successfully!'); // Step 2: Success toast
+        toast.success('Recipe deleted successfully!'); 
       })
       .catch(error => {
-        toast.error('Failed to delete recipe.'); // Handling errors
+        toast.error('Failed to delete recipe.'); 
       });
   };
 
   return (
     <>
       <nav className="flex items-center justify-between py-4 px-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md">
-        <h1 className="text-4xl font-bold">Recipe Book</h1>
+        <h1 className="text-4xl font-bold">Simplicook</h1>
         <button onClick={() => setShowAddRecipe(!showAddRecipe)} className="bg-white hover:bg-gray-100 text-blue-500 font-bold py-2 px-4 rounded transition duration-200">
           {showAddRecipe ? 'Close' : 'Add Recipe'}
         </button>

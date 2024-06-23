@@ -1,23 +1,30 @@
-# Recipe Book
+# Simplicook
 
-A recipe book app with basic CRUD operations.
+A comprehensive recipe book application with enhanced features and basic CRUD operations.
 
 ## Tech Stack
-- React JS Frontend with Tailwind CSS
-- Django Backend with REST and SQLite3
+- Frontend: React JS with Tailwind CSS
+- Backend: Django with REST Framework
+- Database: SQLite3
 
 ## How To Run
-1. Start API (Server)
-- Make sure you are in backend directory and if not use `cd backend`.
-- Also ensure you have `Django` and `djangorestframework` installed.
-  ```bash
+### Backend Setup (API)
+1. Make sure you are in backend directory and if not use `cd backend`.
+2. Also ensure you have `Django` and `djangorestframework` installed.
+  ```python
   python manage.py migrate
   python manage.py runserver
   ```
-2. Run Frontend
-- Make sure you are in frontend directory and if not use `cd frontend`.
-- Also, ensure you have the latest `node` version installed
+3. Load sample data (Optional).
+  ```python
+  python manage.py loadsampledata
+  ```
+### Frontend Setup
+1. Make sure you are in frontend directory and if not use `cd frontend`.
+2. Also, ensure you have the latest `node` version installed
    ```bash
    npm install
    npm run dev
    ```
+### There you go!
+- Open the localhost (default port: `5173`) to interact with our app.

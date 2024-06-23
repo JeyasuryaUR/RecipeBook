@@ -1,82 +1,77 @@
 import React, { useState } from 'react';
-import { FaRegImage, FaUtensils, FaBook, FaTag, FaUpload, FaClock, FaFire, FaStar, FaUserFriends } from 'react-icons/fa'; // Import FontAwesome icons
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'; // Import a loading icon
+import { toast } from 'react-toastify';
+import { FaRegImage, FaUtensils, FaBook, FaTag, FaUpload, FaClock, FaFire, FaUserFriends } from 'react-icons/fa';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+
+function FormField({ label, type = "text", value, onChange, optional = false, icon: Icon, ...props }) {
+  return (
+    <div className="flex flex-col mb-4 relative">
+      <label className="mb-1 text-gray-700">
+        {label} {optional && <span className="text-sm text-gray-500">(Optional)</span>}
+      </label>
+      <div className="flex items-center border-2 p-2 rounded border-gray-200 focus-within:border-gray-200 focus:ring-0 w-full">
+        {Icon && <Icon className="mr-2 self-start pt-1 h-full text-gray-500" />}
+        {type === "textarea" ? (
+          <textarea
+            className="flex-1 border-0 outline-none focus:ring-0"
+            value={value}
+            onChange={onChange}
+            {...props}
+          />
+        ) : (
+          <input
+            type={type}
+            className="flex-1 border-0 outline-none focus:ring-0"
+            value={value}
+            onChange={onChange}
+            {...props}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
 
 function RecipeForm({ onSubmit, initialValues }) {
-  const [title, setTitle] = useState(initialValues.title || '');
-  const [ingredients, setIngredients] = useState(initialValues.ingredients || '');
-  const [instructions, setInstructions] = useState(initialValues.instructions || '');
-  const [category, setCategory] = useState(initialValues.category || '');
-  const [imageUrl, setImageUrl] = useState(initialValues.imageUrl || '');
-  const [prepTime, setPrepTime] = useState(initialValues.prepTime || '');
-  const [calories, setCalories] = useState(initialValues.calories || '');
-  const [servings, setServings] = useState(initialValues.servings || '');
+  const [formData, setFormData] = useState({
+    title: initialValues.title || '',
+    ingredients: initialValues.ingredients || '',
+    instructions: initialValues.instructions || '',
+    category: initialValues.category || '',
+    imageUrl: initialValues.imageUrl || '',
+    prep_time: initialValues.prep_time || '',
+    calories: initialValues.calories || '',
+    servings: initialValues.servings || '',
+  });
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (key) => (e) => {
+    setFormData({ ...formData, [key]: e.target.value });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-
-    // Create a new object with the required fields
-    const formData = {
-      title,
-      ingredients,
-      instructions,
-      category,
-    };
-
-    // Conditionally add optional fields if they have a value
-    if (imageUrl) formData.imageUrl = imageUrl;
-    if (prepTime) formData.prepTime = prepTime;
-    if (calories) formData.calories = calories;
-    if (servings) formData.servings = servings;
-
-    await onSubmit(formData);
-    setIsLoading(false);
+    try {
+      await onSubmit(formData); // Assuming onSubmit returns a promise
+      toast.success('Recipe submitted successfully!');
+    } catch (error) {
+      toast.error('Failed to submit the recipe. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-      <div className="flex items-center border border-gray-300 rounded p-2">
-        <FaBook className="mr-2" />
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required 
-          className="w-full" />
-      </div>
-      <div className="flex items-center border border-gray-300 rounded p-2">
-        <FaUtensils className="mr-2" />
-        <input type="text" value={ingredients} onChange={(e) => setIngredients(e.target.value)} placeholder="Ingredients" required 
-          className="w-full" />
-      </div>
-      <div className="flex items-center border border-gray-300 rounded p-2">
-        <FaUpload className="mr-2" />
-        <textarea value={instructions} onChange={(e) => setInstructions(e.target.value)} placeholder="Instructions" required 
-          className="w-full" />
-      </div>
-      <div className="flex items-center border border-gray-300 rounded p-2">
-        <FaTag className="mr-2" />
-        <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Category" required 
-          className="w-full" />
-      </div>
-      <div className="flex items-center border border-gray-300 rounded p-2">
-        <FaRegImage className="mr-2" />
-        <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="Image URL"
-          className="w-full" />
-      </div>
-      <div className="flex items-center border border-gray-300 rounded p-2">
-        <FaClock className="mr-2" />
-        <input type="text" value={prepTime} onChange={(e) => setPrepTime(e.target.value)} placeholder="Preparation Time" 
-          className="w-full" />
-      </div>
-      <div className="flex items-center border border-gray-300 rounded p-2">
-        <FaFire className="mr-2" />
-        <input type="number" value={calories} onChange={(e) => setCalories(e.target.value)} placeholder="Calories" 
-          className="w-full" />
-      </div>
-      <div className="flex items-center border border-gray-300 rounded p-2">
-        <FaUserFriends className="mr-2" />
-        <input type="number" value={servings} onChange={(e) => setServings(e.target.value)} placeholder="Servings" 
-          className="w-full" />
-      </div>
+      <FormField label="Title" value={formData.title} onChange={handleChange('title')} required icon={FaBook} />
+      <FormField label="Ingredients" value={formData.ingredients} onChange={handleChange('ingredients')} required icon={FaUtensils} />
+      <FormField label="Instructions" type="textarea" value={formData.instructions} onChange={handleChange('instructions')} required icon={FaRegImage} />
+      <FormField label="Category" value={formData.category} onChange={handleChange('category')} required icon={FaTag} />
+      <FormField label="Image URL" value={formData.imageUrl} onChange={handleChange('imageUrl')} optional icon={FaUpload} />
+      <FormField label="Preparation Time" value={formData.prep_time} onChange={handleChange('prep_time')} optional icon={FaClock} />
+      <FormField label="Calories" type="number" value={formData.calories} onChange={handleChange('calories')} optional icon={FaFire} />
+      <FormField label="Servings" type="number" value={formData.servings} onChange={handleChange('servings')} optional icon={FaUserFriends} />
       <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded flex justify-center items-center">
         {isLoading ? <AiOutlineLoading3Quarters className="animate-spin" /> : 'Submit'}
       </button>

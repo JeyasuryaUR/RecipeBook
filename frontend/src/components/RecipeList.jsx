@@ -34,8 +34,8 @@ function RecipeList({ recipes, onEdit, onDelete, children }) {
 
   return (
     <div className="flex">
-  <div className="w-1/4">{children}</div>
-  <div className="w-3/4">
+  <div className="w-fit md:w-1/4">{children}</div>
+<div className="w-full md:w-3/4">
     <div className="p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {recipes.map((recipe) => (
