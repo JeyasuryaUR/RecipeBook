@@ -8,7 +8,7 @@ const FilterPane = ({ handleFilterChange }) => {
     servings: [1, 10], 
     prep_time: "",
     category: "",
-    keywords: "",
+    keyword: "",
   };
 
   const [filters, setFilters] = useState(initialFilters);
