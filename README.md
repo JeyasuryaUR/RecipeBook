@@ -2,6 +2,9 @@
 
 A comprehensive recipe book application with enhanced features and basic CRUD operations.
 
+## Demo
+https://github.com/JeyasuryaUR/Simplicook/assets/72905976/6d1ab551-332b-4026-8dd1-77a1acbd656c
+
 ## Tech Stack
 - Frontend: React JS with Tailwind CSS
 - Backend: Django with REST Framework
